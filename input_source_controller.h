@@ -15,6 +15,7 @@ public:
     InputSourceController();
     void showSelected() const;
     void listAvailable() const;
+    void switchInputSource() const;
     void select(const std::string& isId) const;
 
 private:

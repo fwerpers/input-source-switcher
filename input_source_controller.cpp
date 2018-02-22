@@ -39,6 +39,36 @@ InputSourceController::listAvailable() const {
 }
 
 void
+InputSourceController::switchInputSource() const {
+    TISInputSourceRef is = TISCopyCurrentKeyboardInputSource();
+    CFStringRef selected_id_string = (CFStringRef)TISGetInputSourceProperty(is, kTISPropertyInputSourceID);
+
+    CFDictionaryWrap filter;
+    filter.set(kTISPropertyInputSourceIsEnabled, kCFBooleanTrue);
+    filter.set(kTISPropertyInputSourceIsSelectCapable, kCFBooleanTrue);
+    filter.set(kTISPropertyInputSourceType, kTISTypeKeyboardLayout);
+
+    CFArrayRef sourceList = TISCreateInputSourceList(filter.cfDict(), false);
+    if (sourceList == NULL)
+        return;
+    
+    CFIndex cnt = CFArrayGetCount(sourceList);
+    for (CFIndex i = 0; i < cnt; ++i) {
+        TISInputSourceRef inputSource = (TISInputSourceRef)CFArrayGetValueAtIndex(sourceList, i);
+        CFStringRef id_string = (CFStringRef)TISGetInputSourceProperty(inputSource, kTISPropertyInputSourceID);
+        
+        if (CFStringCompare(selected_id_string, id_string, 0) == kCFCompareEqualTo) {
+            CFIndex nextIdx = (i+1)%cnt;
+            TISInputSourceRef is_next = (TISInputSourceRef)CFArrayGetValueAtIndex(sourceList, nextIdx);
+            TISSelectInputSource(is_next);
+            break;
+        }   
+    }
+
+    CFRelease(sourceList);
+}
+
+void
 InputSourceController::select(const std::string& isId) const {
     TISInputSourceRef is = findInputSource(isId);
     if (is != NULL) {
