@@ -18,8 +18,8 @@ Usage
     -l - list all selectable input sources
     -V - print version number
 
-    If no arguments are specified, it ~~prints the current input source~~ selects the next keyboard layout as input source.
-    If <input-source-id> is specified, it selects the specified input source.
+If no arguments are specified, it ~~prints the current input source~~ selects the next keyboard layout as input source.
+If `<input-source-id>` is specified, it selects the specified input source.
 
 How to build
 ------------
