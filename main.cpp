@@ -5,7 +5,7 @@
 #include "issw_config.h"
 #include "input_source_controller.h"
 
-enum RunMode { RM_showSelected, RM_listAvailable, RM_showUsage, RM_showVersion, RM_skip };
+enum RunMode { RM_showSelected, RM_switch, RM_listAvailable, RM_showUsage, RM_showVersion, RM_skip };
 
 int
 main(int argc, char* argv[]) {
@@ -13,7 +13,7 @@ main(int argc, char* argv[]) {
     //
     ReceiveNextEvent(0, NULL, 0, 0, NULL);
 
-    RunMode runMode = RM_showSelected;
+    RunMode runMode = RM_switch;
 
     int ch;
 
@@ -53,6 +53,8 @@ main(int argc, char* argv[]) {
     }
 
     switch (runMode) {
+        case RM_switch:
+            ctrl.switchInputSource();
         case RM_showSelected:
             ctrl.showSelected();
             break;
